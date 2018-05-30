@@ -21,7 +21,7 @@
 #'     creates fasta file of strain library
 #'     creates fasta files of species with multiple isolates found
 #'
-#' @import dyplr
+#' @import dplyr
 #' @import stringr
 #' @export
 
