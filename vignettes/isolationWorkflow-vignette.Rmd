@@ -1,0 +1,135 @@
+---
+title: "isolationWorkflow Vignette"
+author: "Sandi Yen"
+date: "`May 30 2018`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{isolationWorkflow Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This outlines how to use the isolationWorkflow as intended:
+
+1) Prepare sequences for Blastn
+2) Blast your fasta file
+3) Read in blast results, and compile into table
+4a) Generate/update strain library and fasta file
+4b) Creates fasta file by species for ones that need sequence alignment (amalgamates strains from current ##  blast result and strain library)
+5) use EMBL clustal omega sequence alignment tool to generate alignment file
+6) Update strain library based on alignment
+
+--------------
+# 1) Prepare sequences for Blast
+This step includes:
+* Check if sequences were successful, and allows you to exlude failed sequences
+* Trim ends off of sequences, as they are usually strings of Ns
+* Make a fasta file containing all sequences from your Big Dye plate so can send in one Blastn query
+
+All of this is done using the `abif_fasta()`. I recommend running this command twice. The first time I use to evaluate all of my sequences, and the second time I generate a "clean" fasta file. 
+
+This will give you: 
+* a file containing sequences before and after trimming
+* a fasta file containing trimmed sequences (if `output = FALSE`)
+Note: all output files saved in same location as sanger files
+
+When evaluating sequences, look for the following:
+* sequence length -- too short means the sequence failed (i.e. DNA not released from boiling, no PCR product or BigDye failed)
+* distribution of Ns -- Ns throughout the majority of the read means the isolate was not pure
+* satisfaction with the trimming algorithm -- compare the raw vs. trimmmed version of the sequence to ensure you agree with the trimming. If you don't, manually edit the final FASTA file before Blasting
+
+
+```{r, echo = TRUE, eval = FALSE}
+
+# Check for sequence quality, and trimming
+abif_fasta(folder = "/path/to/sanger/files/",
+           exclude = NULL,
+           trim=TRUE, trim.check=FALSE,
+           export.check=TRUE, show.prog=TRUE, 
+           output=FALSE)
+
+# prepare sequences for Blast
+abif_fasta(folder = "/path/to/sanger/files/",
+           exclude = NULL,
+           trim=TRUE, trim.check=FALSE,
+           export.check=TRUE, show.prog=TRUE, 
+           output='myIsolates-clean.FASTA')
+
+# 
+```
+-------------
+
+# 2) Blast your sequences
+Use Blastn (<https://blast.ncbi.nlm.nih.gov/Blast.cgi>) to classify your sequences. Setting the database to 16S ribosomal RNA sequences (Bacteria and Archaea) helps with specificity of the search.
+
+Download your blast result as an XML file and save in same location as sanger files. Then using the `parse_blast()`, we can read our results and save as a csv table. Output is saved in same location as your downloaded xml file.
+
+# 3) Read in blast results
+
+```{r, echo = TRUE, eval = FALSE}
+# include path to blast result if necessary
+parse_blast(filename='/path/to/downloaded/blast/result/######-Alignment.xml',
+            ngroups=1, tophit=FALSE,
+            output='blast_result.csv')
+```
+
+# 4) Building a strain library
+You can use `gen_strainlib()` to both generate and update your strain library, depending on how the parameters are used. Regardless, when you use `gen_strainlib()` the following happens:
+
+* reads in blast result file from parse blast
+* if no strain library supplied, creates a new one
+* Species that are only found once and not already in strain library are added to library
+* Generates strain library as csv
+* Generates strain library as fasta
+* Generates fasta file for each species when more than one isolate is assigned that species
+
+Regarding the last point, the blast result being examined will be cross referenced with the strain library. So you can compare and align your blast results with strains already in your library. These species-based fasta files allow you to align the sequences that are classified to the same species (see next step)
+
+Note: a fasta file of your library strains is also generated because that is a useful thing to have.
+
+``` {r, echo = TRUE, eval = FALSE}
+# generating strain library
+gen _strainlib(blast_file = "/include/path/if/necessary/blast_result.csv",
+               lib_path = "/path/to/strain/library", 
+               lib_file = NULL, lib_name = 'mystrainlibrary')
+
+# updating strain library
+gen _strainlib(blast_file = "/include/path/if/necessary/blast_result.csv",
+               lib_path = "/path/to/strain/library", 
+               lib_file = "mystrainlibrary.csv", lib_name = NULL)
+```
+
+# 5) Sequence alignment using EMBL Clustal Omega
+Use EMBL's Clustal Omega tool (<https://www.ebi.ac.uk/Tools/msa/clustalo/>), specifying "DNA" as the type of sequence entered. Download the alignment result.
+Note: EMBL's tool does not allow duplicate strain names!
+
+# 6) Update strain library based on alignment results
+Once you have downloaded your alignment files, you can choose which strains you want to add to your strain library. If all your alignment files are in the same folder, you can supply more than file at once to save you time. Examine the alignments and decide which strains you want to add to your library. I prefer to open my alignment files in a seperate text editor, like notepad++, for easier viewing. Alternatively, you can choose to view them in the R console by setting `viewinR = TRUE`, however, there are print limits to R, so part of the document may be cut off.
+
+The alignment file highlights an asterix (`*`) when sequences are identical at that base postion, and leaves a blank when at least one sequence differs at that base. When choosing which strains to keep, consider the following:
+* is the difference due to an N? if so, then you don't have enough information to say the sequences are different at that base
+* a strain that is different from others, ONLY because of Ns may have poor sequence quality and you should consider redoing the sequencing for that isolate.
+
+```{r, echo = TRUE, eval = FALSE}
+# supply more than one alignement to save time
+choose_alignment(lib_path = "/path/to/strain/library", 
+                 lib_file = 'mystrainlibrary.csv', 
+                 blast_file = "/include/path/if/necessary/blast_result.csv",
+                 align_path = "/path/to/alignment/files",
+                 alignment = c("species1.clustal_num",
+                               "species2.clustal_num",
+                               "species3.clustal_num"),
+                 viewinR = FALSE)
+```
+
+# Concluding remarks
+Since isolation results usually comes back in waves, it is helpful to be checking your results as you go, and freezing strains down as needed (rather than waiting for all results to come back, then deciding whichs strains to keep). This workflow is designed so that you are able to examine sanger sequences as they come in, and easily cross-reference them with the strains you have already decided to keep in your strain library.
+
+Note, the final strain library file is in the same format as the blast result. This may have extra info you may not find useful in your final strain library. I recommend you don't modify the format, but rather, copy and paste into a seperate file to edit as you please. 

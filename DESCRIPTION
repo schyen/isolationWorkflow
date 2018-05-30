@@ -1,0 +1,29 @@
+Package: isolationWorkflow
+Type: Package
+Title: Workflow for building strain libraries during isolation experiments
+Version: 0.1.0
+Author: person("Yen","Sandi", email = "sandi.yen@gmail.com", rowl = c("aut", "cre"))
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: Contains tools necessary to analyze and organize sanger sequences 
+      of isolates obtained during isolation experiments. Is designed to be build
+      strain sequence library as results come in. Therefore, the workflow can be
+      used to iteratively build library throughout the isolation experiment
+Encoding: UTF-8
+LazyData: true
+License: MIT
+Imports:
+    dplyr,
+    hash,
+    seqinr,
+    stringr,
+    xml2
+Collate:
+    'abif_fasta.R'
+    'df2fasta.R'
+    'parse_blast.R'
+    'gen_strainlib.R'
+    'choose_alignment.R'
+RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
