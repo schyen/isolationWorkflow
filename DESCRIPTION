@@ -12,10 +12,10 @@ Encoding: UTF-8
 LazyData: true
 License: MIT
 Imports:
-    dplyr,
     hash,
     seqinr,
     stringr,
+    dplyr,
     xml2
 Collate:
     'abif_fasta.R'
