@@ -61,8 +61,6 @@ abif_fasta(folder = "/path/to/sanger/files/",
            trim=TRUE, trim.check=FALSE,
            export.check=TRUE, show.prog=TRUE, 
            output='myIsolates-clean.FASTA')
-
-# 
 ```
 -------------
 
