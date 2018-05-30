@@ -18,6 +18,11 @@ Creates a library file if none supplied.}
 \item{lib_name}{string. defaults to generic library name,name of strain library (only used if new one is
 being created)}
 }
+\value{
+creates/updates strain library
+    creates fasta file of strain library
+    creates fasta files of species with multiple isolates found
+}
 \description{
 function to generate/update strain library and fasta file
 reads in blast result file from parse blast
