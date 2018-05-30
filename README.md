@@ -1,5 +1,8 @@
 isolationWorkflow
 
-install:
+
+install instructions:
+```
 library(devtools)
 install_github("schyen/isolationWorkflow")
+```
