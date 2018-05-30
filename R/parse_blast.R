@@ -18,7 +18,7 @@
 #' @import hash
 #'
 #' @return blast results in the form of csv file, e.g. blast_result.csv
-
+#' @export
 
 parse_blast <- function(filename=NULL, ngroups=1, tophit=FALSE,
                         output='blast_result.csv') {

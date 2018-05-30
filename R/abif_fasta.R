@@ -31,6 +31,7 @@
 #'
 #' @import seqinr
 #' @import stringr
+#' @export
 #------------------------------------------------------------------------------------
 abif_fasta <- function(folder=NULL, exclude=NULL,
                        trim=TRUE, trim.check=FALSE,

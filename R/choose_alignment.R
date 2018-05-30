@@ -14,6 +14,7 @@
 #' @return updates strain library with strains selected
 #'
 #' @import stringr
+#' @export
 
 choose_alignment <- function(lib_path, lib_file, blast_file,
                              align_path, alignment,

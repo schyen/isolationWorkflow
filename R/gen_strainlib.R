@@ -16,12 +16,17 @@
 #'     Creates a library file if none supplied.
 #' @param lib_name string. defaults to generic library name,name of strain library (only used if new one is
 #'     being created)
+#'
+#' @return creates/updates strain library
+#'     creates fasta file of strain library
+#'     creates fasta files of species with multiple isolates found
+#'
+#' @import dyplr
+#' @import stringr
+#' @export
 
 gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
                                lib_name = 'mystrainlibrary') {
-
-  require(dplyr)
-  require(stringr)
 
   # read in blast result--------------------------------------------------------
   blast <- read.csv(blast_file, header = TRUE)
