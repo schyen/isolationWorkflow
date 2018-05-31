@@ -88,5 +88,4 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
     do(df2fasta(., fname = unique(.$match), path = lib_path,
                 header_col = 'sample_name', seq_col = 'query_seq'))
 
-
 }
