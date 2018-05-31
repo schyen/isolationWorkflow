@@ -55,8 +55,9 @@ abif_fasta(folder = "/path/to/sanger/files/",
            output=FALSE)
 
 # prepare sequences for Blast
+## exclude parameter accepts multiple entries to exclude multiple samples
 abif_fasta(folder = "/path/to/sanger/files/",
-           exclude = NULL,
+           exclude = c('sample1.ab1','sample2.ab1'),
            trim=TRUE, trim.check=FALSE,
            export.check=TRUE, show.prog=TRUE, 
            output='myIsolates-clean.FASTA')
