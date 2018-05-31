@@ -70,6 +70,7 @@ choose_alignment <- function(lib_path, lib_file, blast_file,
   # making fasta file of strain library-----------------------------------------
   lib_name <- str_extract(lib_file, ".*(?=\\.csv)")
   msg <- sprintf("Writing fasta file of strain library: %s.fasta", lib_name)
+  message(msg)
 
   lib_df <- read.csv(file.path(lib_path, lib_file), header = TRUE,
                      stringsAsFactors = FALSE)
