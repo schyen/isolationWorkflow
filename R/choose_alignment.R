@@ -46,8 +46,8 @@ choose_alignment <- function(lib_path, lib_file, blast_file,
     if(any(choices %in% lib_df$sample_name)) {
       in_lib <- choices[choices %in% lib_df$sample_name]
 
-      msg <- sprintf("%s is already found in strain library %s",
-                     c(in_lib, lib_file))
+      msg <- sprintf("%s is already found in strain library", in_lib)
+      msg <- paste(msg, lib_file, sep = ' ')
       for(i in msg) message(msg)
     }
 

@@ -29,7 +29,7 @@
 #'
 #' @return a fasta file of trimmed sequences
 #'
-#' @import seqinr
+#' @importFrom seqinr read.abif
 #' @import stringr
 #' @export
 #------------------------------------------------------------------------------------
