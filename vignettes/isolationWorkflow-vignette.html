@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Sandi Yen" />
+
+
+<title>isolationWorkflow Vignette</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">isolationWorkflow Vignette</h1>
+<h4 class="author"><em>Sandi Yen</em></h4>
+<h4 class="date"><em><code>May 30 2018</code></em></h4>
+
+
+
+<p>This outlines how to use the isolationWorkflow as intended:</p>
+<ol style="list-style-type: decimal">
+<li>Prepare sequences for Blastn</li>
+<li>Blast your fasta file</li>
+<li>Read in blast results, and compile into table 4a) Generate/update strain library and fasta file 4b) Creates fasta file by species for ones that need sequence alignment (amalgamates strains from current ## blast result and strain library)</li>
+<li>use EMBL clustal omega sequence alignment tool to generate alignment file</li>
+<li>Update strain library based on alignment</li>
+</ol>
+<div id="prepare-sequences-for-blast" class="section level1">
+<h1>1) Prepare sequences for Blast</h1>
+<p>This step includes: * Check if sequences were successful, and allows you to exlude failed sequences * Trim ends off of sequences, as they are usually strings of Ns * Make a fasta file containing all sequences from your Big Dye plate so can send in one Blastn query</p>
+<p>All of this is done using the <code>abif_fasta()</code>. I recommend running this command twice. The first time I use to evaluate all of my sequences, and the second time I generate a “clean” fasta file.</p>
+<p>This will give you: * a file containing sequences before and after trimming * a fasta file containing trimmed sequences (if <code>output = FALSE</code>) Note: all output files saved in same location as sanger files</p>
+<p>When evaluating sequences, look for the following: * sequence length – too short means the sequence failed (i.e. DNA not released from boiling, no PCR product or BigDye failed) * distribution of Ns – Ns throughout the majority of the read means the isolate was not pure * satisfaction with the trimming algorithm – compare the raw vs. trimmmed version of the sequence to ensure you agree with the trimming. If you don’t, manually edit the final FASTA file before Blasting</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"></a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co"># Check for sequence quality, and trimming</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">abif_fasta</span>(<span class="dt">folder =</span> <span class="st">&quot;/path/to/sanger/files/&quot;</span>,</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">           <span class="dt">exclude =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">           <span class="dt">trim=</span><span class="ot">TRUE</span>, <span class="dt">trim.check=</span><span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">           <span class="dt">export.check=</span><span class="ot">TRUE</span>, <span class="dt">show.prog=</span><span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">           <span class="dt">output=</span><span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co"># prepare sequences for Blast</span></a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw">abif_fasta</span>(<span class="dt">folder =</span> <span class="st">&quot;/path/to/sanger/files/&quot;</span>,</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">           <span class="dt">exclude =</span> <span class="ot">NULL</span>,</a>
+<a class="sourceLine" id="cb1-12" data-line-number="12">           <span class="dt">trim=</span><span class="ot">TRUE</span>, <span class="dt">trim.check=</span><span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13">           <span class="dt">export.check=</span><span class="ot">TRUE</span>, <span class="dt">show.prog=</span><span class="ot">TRUE</span>, </a>
+<a class="sourceLine" id="cb1-14" data-line-number="14">           <span class="dt">output=</span><span class="st">'myIsolates-clean.FASTA'</span>)</a></code></pre></div>
+</div>
+<div id="blast-your-sequences" class="section level1">
+<h1>2) Blast your sequences</h1>
+<p>Use Blastn (<a href="https://blast.ncbi.nlm.nih.gov/Blast.cgi" class="uri">https://blast.ncbi.nlm.nih.gov/Blast.cgi</a>) to classify your sequences. Setting the database to 16S ribosomal RNA sequences (Bacteria and Archaea) helps with specificity of the search.</p>
+<p>Download your blast result as an XML file and save in same location as sanger files. Then using the <code>parse_blast()</code>, we can read our results and save as a csv table. Output is saved in same location as your downloaded xml file.</p>
+</div>
+<div id="read-in-blast-results" class="section level1">
+<h1>3) Read in blast results</h1>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co"># include path to blast result if necessary</span></a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">parse_blast</span>(<span class="dt">filename=</span><span class="st">'/path/to/downloaded/blast/result/######-Alignment.xml'</span>,</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3">            <span class="dt">ngroups=</span><span class="dv">1</span>, <span class="dt">tophit=</span><span class="ot">FALSE</span>,</a>
+<a class="sourceLine" id="cb2-4" data-line-number="4">            <span class="dt">output=</span><span class="st">'blast_result.csv'</span>)</a></code></pre></div>
+</div>
+<div id="building-a-strain-library" class="section level1">
+<h1>4) Building a strain library</h1>
+<p>You can use <code>gen_strainlib()</code> to both generate and update your strain library, depending on how the parameters are used. Regardless, when you use <code>gen_strainlib()</code> the following happens:</p>
+<ul>
+<li>reads in blast result file from parse blast</li>
+<li>if no strain library supplied, creates a new one</li>
+<li>Species that are only found once and not already in strain library are added to library</li>
+<li>Generates strain library as csv</li>
+<li>Generates strain library as fasta</li>
+<li>Generates fasta file for each species when more than one isolate is assigned that species</li>
+</ul>
+<p>Regarding the last point, the blast result being examined will be cross referenced with the strain library. So you can compare and align your blast results with strains already in your library. These species-based fasta files allow you to align the sequences that are classified to the same species (see next step)</p>
+<p>Note: a fasta file of your library strains is also generated because that is a useful thing to have.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># generating strain library</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">gen <span class="kw">_strainlib</span>(<span class="dt">blast_file =</span> <span class="st">&quot;/include/path/if/necessary/blast_result.csv&quot;</span>,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">               <span class="dt">lib_path =</span> <span class="st">&quot;/path/to/strain/library&quot;</span>, </a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">               <span class="dt">lib_file =</span> <span class="ot">NULL</span>, <span class="dt">lib_name =</span> <span class="st">'mystrainlibrary'</span>)</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co"># updating strain library</span></a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">gen <span class="kw">_strainlib</span>(<span class="dt">blast_file =</span> <span class="st">&quot;/include/path/if/necessary/blast_result.csv&quot;</span>,</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">               <span class="dt">lib_path =</span> <span class="st">&quot;/path/to/strain/library&quot;</span>, </a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">               <span class="dt">lib_file =</span> <span class="st">&quot;mystrainlibrary.csv&quot;</span>, <span class="dt">lib_name =</span> <span class="ot">NULL</span>)</a></code></pre></div>
+</div>
+<div id="sequence-alignment-using-embl-clustal-omega" class="section level1">
+<h1>5) Sequence alignment using EMBL Clustal Omega</h1>
+<p>Use EMBL’s Clustal Omega tool (<a href="https://www.ebi.ac.uk/Tools/msa/clustalo/" class="uri">https://www.ebi.ac.uk/Tools/msa/clustalo/</a>), specifying “DNA” as the type of sequence entered. Download the alignment result. Note: EMBL’s tool does not allow duplicate strain names!</p>
+</div>
+<div id="update-strain-library-based-on-alignment-results" class="section level1">
+<h1>6) Update strain library based on alignment results</h1>
+<p>Once you have downloaded your alignment files, you can choose which strains you want to add to your strain library. If all your alignment files are in the same folder, you can supply more than file at once to save you time. Examine the alignments and decide which strains you want to add to your library. I prefer to open my alignment files in a seperate text editor, like notepad++, for easier viewing. Alternatively, you can choose to view them in the R console by setting <code>viewinR = TRUE</code>, however, there are print limits to R, so part of the document may be cut off.</p>
+<p>The alignment file highlights an asterix (<code>*</code>) when sequences are identical at that base postion, and leaves a blank when at least one sequence differs at that base. When choosing which strains to keep, consider the following: * is the difference due to an N? if so, then you don’t have enough information to say the sequences are different at that base * a strain that is different from others, ONLY because of Ns may have poor sequence quality and you should consider redoing the sequencing for that isolate.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># supply more than one alignement to save time</span></a>
+<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="kw">choose_alignment</span>(<span class="dt">lib_path =</span> <span class="st">&quot;/path/to/strain/library&quot;</span>, </a>
+<a class="sourceLine" id="cb4-3" data-line-number="3">                 <span class="dt">lib_file =</span> <span class="st">'mystrainlibrary.csv'</span>, </a>
+<a class="sourceLine" id="cb4-4" data-line-number="4">                 <span class="dt">blast_file =</span> <span class="st">&quot;/include/path/if/necessary/blast_result.csv&quot;</span>,</a>
+<a class="sourceLine" id="cb4-5" data-line-number="5">                 <span class="dt">align_path =</span> <span class="st">&quot;/path/to/alignment/files&quot;</span>,</a>
+<a class="sourceLine" id="cb4-6" data-line-number="6">                 <span class="dt">alignment =</span> <span class="kw">c</span>(<span class="st">&quot;species1.clustal_num&quot;</span>,</a>
+<a class="sourceLine" id="cb4-7" data-line-number="7">                               <span class="st">&quot;species2.clustal_num&quot;</span>,</a>
+<a class="sourceLine" id="cb4-8" data-line-number="8">                               <span class="st">&quot;species3.clustal_num&quot;</span>),</a>
+<a class="sourceLine" id="cb4-9" data-line-number="9">                 <span class="dt">viewinR =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+</div>
+<div id="concluding-remarks" class="section level1">
+<h1>Concluding remarks</h1>
+<p>Since isolation results usually comes back in waves, it is helpful to be checking your results as you go, and freezing strains down as needed (rather than waiting for all results to come back, then deciding whichs strains to keep). This workflow is designed so that you are able to examine sanger sequences as they come in, and easily cross-reference them with the strains you have already decided to keep in your strain library.</p>
+<p>Note, the final strain library file is in the same format as the blast result. This may have extra info you may not find useful in your final strain library. I recommend you don’t modify the format, but rather, copy and paste into a seperate file to edit as you please.</p>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

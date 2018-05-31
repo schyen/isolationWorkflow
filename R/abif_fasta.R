@@ -46,6 +46,7 @@ abif_fasta <- function(folder=NULL, exclude=NULL,
 
   #getting abif files
   fname <- list.files(path)
+
   pattern <- 'ab1'
   abif_files <- str_subset(fname, pattern)
 

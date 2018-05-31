@@ -26,7 +26,6 @@ This outlines how to use the isolationWorkflow as intended:
 5) use EMBL clustal omega sequence alignment tool to generate alignment file
 6) Update strain library based on alignment
 
---------------
 # 1) Prepare sequences for Blast
 This step includes:
 * Check if sequences were successful, and allows you to exlude failed sequences
@@ -62,7 +61,6 @@ abif_fasta(folder = "/path/to/sanger/files/",
            export.check=TRUE, show.prog=TRUE, 
            output='myIsolates-clean.FASTA')
 ```
--------------
 
 # 2) Blast your sequences
 Use Blastn (<https://blast.ncbi.nlm.nih.gov/Blast.cgi>) to classify your sequences. Setting the database to 16S ribosomal RNA sequences (Bacteria and Archaea) helps with specificity of the search.
