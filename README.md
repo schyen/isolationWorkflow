@@ -11,6 +11,9 @@ library(devtools)
 
 # download and install isolationWorkflow
 install_github("schyen/isolationWorkflow", build_vignette = TRUE)
+
+# load isolationWorkflow package
+library('isolationWorkflow')
 ```
 To view the vignette:
 `browseVignettes(package = "isolationWorkflow")`
