@@ -86,7 +86,7 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
 
   species_df <- wip_df[,c('sample_name','match','query_seq')] %>%
     group_by(match) %>%
-    do(df2fasta(., fname = unique(.$match), path = lib_path,
+    do(dummy = df2fasta(., fname = unique(.$match), path = lib_path,
                 header_col = 'sample_name', seq_col = 'query_seq'))
 
 }
