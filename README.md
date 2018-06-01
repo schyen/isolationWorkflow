@@ -18,3 +18,5 @@ library('isolationWorkflow')
 To view the vignette:
 `browseVignettes(package = "isolationWorkflow")`
 And click `html`
+
+Or you can see the instructions in the Wiki tab
