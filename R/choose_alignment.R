@@ -5,11 +5,8 @@
 #' @param lib_path string. path. location of strain library
 #' @param lib_file string. file name. strain library file
 #' @param blast_file string. file name. csv file of blast results
-#' @param align_path string. path. location of alignment file
-#' @param alignment string or vector of strings. file name. alignment file
-#'     downloaded from EMBL clustal omega.
-#' @param viewinR logical. default \code{FALSE.} When TRUE, displays alignment
-#'     file in R console
+#' @param fasta_path string. path. location of fasta file(s) that need to be aligned
+#' @param fastatoalgin string or vector of strings. fasta files to be aligned.
 #'
 #' @return updates strain library with strains selected
 #'
@@ -17,29 +14,38 @@
 #' @export
 
 choose_alignment <- function(lib_path, lib_file, blast_file,
-                             align_path, alignment,
-                             viewinR = FALSE) {
+                             fasta_path, fastatoalign) {
   # read in strain files-------------------------------------------------------
   lib_df <- read.csv(file.path(lib_path, lib_file), header = TRUE,
                      stringsAsFactors = FALSE)
 
   blast_df <- read.csv(blast_file, header = TRUE)
 
-  for (i in 1:length(alignment)) {
+  for (i in 1:length(fastatoalign)) {
+    print(fastatoalign[i])
+    # reading in sequences
+    str_set <- Biostrings::readDNAStringSet(file.path(fasta_path, fastatoalign[i]))
 
-    msg <- sprintf("\nReading alignment file: %s\n", alignment[i])
-    message(msg)
+    # remove gaps
+    str_set <- DECIPHER::RemoveGaps(str_set, removeGaps = "all")
 
-    align_df <- read.table(file.path(align_path, alignment[i]),
-                           sep = '\t', fill=TRUE, row.names = NULL)
+    # perform alignment
+    align_file <- str_extract(fastatoalign[i], ".*(?=\\.fasta)")
+    align_file <- paste0("alignment-", align_file, ".html")
+    align_file <- file.path(fasta_path, align_file)
 
+    print(align_file)
+    aligned <- DECIPHER::AlignSeqs(str_set, iterations = 0, refinements = 0)
 
-    if(viewinR) {
-      print(align_df)
-    }
+    # view alignment
+    DECIPHER::BrowseSeqs(aligned, htmlFile = align_file)
+
+    # sample names
+    sample_name <- names(aligned)
 
     # allowing user selection-----------------------------------------------------
-    choices <- align_df[,1]
+    # choices <- align_df[,1]
+    choices <- sample_name
     choices <- unique(unlist(str_extract_all(choices, ".*ab1")))
 
     # identify the strain that is already in strain list

@@ -4,8 +4,7 @@
 \alias{choose_alignment}
 \title{choose_alignment}
 \usage{
-choose_alignment(lib_path, lib_file, blast_file, align_path, alignment,
-  viewinR = FALSE)
+choose_alignment(lib_path, lib_file, blast_file, fasta_path, fastatoalign)
 }
 \arguments{
 \item{lib_path}{string. path. location of strain library}
@@ -14,13 +13,9 @@ choose_alignment(lib_path, lib_file, blast_file, align_path, alignment,
 
 \item{blast_file}{string. file name. csv file of blast results}
 
-\item{align_path}{string. path. location of alignment file}
+\item{fasta_path}{string. path. location of fasta file(s) that need to be aligned}
 
-\item{alignment}{string or vector of strings. file name. alignment file
-downloaded from EMBL clustal omega.}
-
-\item{viewinR}{logical. default \code{FALSE.} When TRUE, displays alignment
-file in R console}
+\item{fastatoalgin}{string or vector of strings. fasta files to be aligned.}
 }
 \value{
 updates strain library with strains selected
