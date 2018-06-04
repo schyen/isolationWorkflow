@@ -66,7 +66,7 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
   msg <- sprintf("%s found as unique species that is not currently in your strain library. Adding to strain library.", add_singles)
   for(i in msg) message(i)
 
-  entry <- blast[blast$match == add_singles,]
+  entry <- blast[blast$match %in% add_singles,]
 
   # appending entry to library
   write.table(entry, lib_file, append = TRUE, sep = ',', row.names = FALSE,
