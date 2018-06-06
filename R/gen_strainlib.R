@@ -28,6 +28,19 @@
 gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
                                lib_name = 'mystrainlibrary') {
 
+  # Check input files
+  if(!file.exists(blast_file)) {
+    stop(sprintf("\nFile does not found: %s", blast_file))
+  }
+  if(!dir.exists(lib_path)) {
+    stop(sprintf("\nLocation not found: %s", lib_path))
+    }
+  if(!is.null(lib_file)) {
+    if(!file.exists(file.path(lib_path, lib_file))) {
+      stop(sprintf("\nFile not found: %s", file.path(lib_path, lib_file)))
+    }
+  }
+
   # read in blast result--------------------------------------------------------
   blast <- read.csv(blast_file, header = TRUE)
 
@@ -52,9 +65,10 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
   # read in library------------------------------------------------------------
   lib_df <- read.csv(lib_file, header = TRUE, stringsAsFactors = FALSE)
 
-
   # identify single species-----------------------------------------------------
-  species_tally <- as.data.frame(table(blast$match))
+  # put current library and current blast results together
+  full_df <- rbind(lib_df, blast)
+  species_tally <- as.data.frame(table(full_df$match))
   colnames(species_tally) <- c('match','Freq')
 
   single <- species_tally[species_tally$Freq == 1,]
