@@ -8,6 +8,17 @@
     * Creates fasta file by species for ones that need sequence alignment (amalgamates strains from current blast result and strain library)
 5) Align redundant species and update strain library
 *****************
+# Getting started
+Once you have downloaded the isolationgWorkflow package, you need to load the package before using it.
+```{r, echo = TRUE, eval = FALSE}
+library(isolationWorkflow)
+```
+Once loaded, you can use `?` to find out more about each function in the package.
+```{r, echo = TRUE, eval = FALSE}
+?abif_fasta()
+?parse_blast()
+```
+*****************
 # 1) Prepare sequences for Blast
 This step includes:
 * Check if sequences were successful, and allows you to exlude failed sequences
