@@ -70,21 +70,27 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
   full_df <- rbind(lib_df, blast)
   species_tally <- as.data.frame(table(full_df$match))
   colnames(species_tally) <- c('match','Freq')
+  species_tally$match <- as.character(species_tally$match)
 
   single <- species_tally[species_tally$Freq == 1,]
+  add_singles <- !single$match %in% lib_df$match
 
-  add_singles <- !single %in% lib_df$match
+  if(any(add_singles)) {
 
-  add_singles <- single[add_singles]$match
+    add_singles <- single$match[add_singles]
 
-  msg <- sprintf("%s found as unique species that is not currently in your strain library. Adding to strain library.", add_singles)
-  for(i in msg) message(i)
+    msg <- sprintf("%s found as unique species that is not currently in your strain library. Adding to strain library.", add_singles)
+    for(i in msg) message(i)
 
-  entry <- blast[blast$match %in% add_singles,]
+    entry <- blast[blast$match %in% add_singles,]
 
-  # appending entry to library
-  write.table(entry, lib_file, append = TRUE, sep = ',', row.names = FALSE,
-              col.names = FALSE)
+    # appending entry to library
+    write.table(entry, lib_file, append = TRUE, sep = ',', row.names = FALSE,
+                col.names = FALSE)
+  }
+  else {
+    message("No unique species added to strain library.")
+  }
 
   # Now go through rest of sequences and create fasta files for each species----
   # getting entries from blast result
