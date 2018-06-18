@@ -93,12 +93,14 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
   }
 
   # Now go through rest of sequences and create fasta files for each species----
-  # getting entries from blast result
-  wip_df <- blast[!blast$match %in% add_singles,]
+
 
   # getting entries from strain library
-  wip_df <- rbind(wip_df, lib_df[lib_df$match %in%
-                                   species_tally$match[species_tally$Freq > 1],])
+  wip_df <- lib_df[lib_df$match %in% species_tally$match[species_tally$Freq > 1]
+                   & lib_df$match %in% unique(blast$match), ]
+
+  # getting entries from blast result
+  wip_df <- rbind(wip_df, blast[!blast$match %in% add_singles,])
 
   msg <- sprintf("\nMultiple strains of %s were found when going through current blast file and strain library. Generating fasta file for this species for sequence alignment", unique(wip_df$match))
 

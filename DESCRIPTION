@@ -1,7 +1,7 @@
 Package: isolationWorkflow
 Type: Package
 Title: Workflow for building strain libraries during isolation experiments
-Version: 0.1.3
+Version: 0.1.4
 Author: person("Yen","Sandi", email = "sandi.yen@gmail.com", rowl = c("aut", "cre"))
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: Contains tools necessary to analyze and organize sanger sequences 
