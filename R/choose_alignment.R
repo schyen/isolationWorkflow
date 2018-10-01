@@ -6,7 +6,7 @@
 #' @param lib_file string. file name. strain library file
 #' @param blast_file string. file name. csv file of blast results
 #' @param fasta_path string. path. location of fasta file(s) that need to be aligned
-#' @param fastatoalgin string or vector of strings. fasta files to be aligned.
+#' @param fastatoalign string or vector of strings. fasta files to be aligned.
 #'
 #' @return updates strain library with strains selected
 #'
