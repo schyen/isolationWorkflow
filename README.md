@@ -4,7 +4,7 @@ isolationWorkflow
 install instructions:
 ```
 # if devtools package not yet installed, install devtools first
-install_packages('devtools')
+install.packages('devtools')
 
 # loading devtools library
 library(devtools)
@@ -13,11 +13,13 @@ library(devtools)
 install_github("schyen/isolationWorkflow", build_vignette = TRUE)
 
 # you may need to install bioconductor dependencies
-source("https://bioconductor.org/biocLite.R")
-biocLite("Biostrings")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("Biostrings", version = "3.8")
 
-source("https://bioconductor.org/biocLite.R")
-biocLite("DECIPHER")
+if (!requireNamespace("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+BiocManager::install("DECIPHER", version = "3.8")
 
 # load isolationWorkflow package
 library('isolationWorkflow')
