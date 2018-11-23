@@ -15,7 +15,7 @@ choose_alignment(lib_path, lib_file, blast_file, fasta_path, fastatoalign)
 
 \item{fasta_path}{string. path. location of fasta file(s) that need to be aligned}
 
-\item{fastatoalgin}{string or vector of strings. fasta files to be aligned.}
+\item{fastatoalign}{string or vector of strings. fasta files to be aligned.}
 }
 \value{
 updates strain library with strains selected

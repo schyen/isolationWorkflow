@@ -14,6 +14,7 @@ License: MIT
 Imports:
     Biostrings,
     DECIPHER,
+    gtools,
     hash,
     seqinr,
     stringr,
@@ -25,7 +26,7 @@ Collate:
     'parse_blast.R'
     'gen_strainlib.R'
     'choose_alignment.R'
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1
 Suggests: knitr,
     rmarkdown
 VignetteBuilder: knitr

@@ -43,7 +43,7 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
 
   # read in blast result--------------------------------------------------------
   blast <- read.csv(blast_file, header = TRUE)
-
+  print(colnames(blast))
   # if strain library not supplied, make new, empty library---------------------
   if(is.null(lib_file)) {
 
@@ -67,7 +67,8 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
 
   # identify single species-----------------------------------------------------
   # put current library and current blast results together
-  full_df <- rbind(lib_df, blast)
+  full_df <- suppressWarnings(gtools::smartbind(lib_df, blast))
+
   species_tally <- as.data.frame(table(full_df$match))
   colnames(species_tally) <- c('match','Freq')
   species_tally$match <- as.character(species_tally$match)
@@ -100,7 +101,7 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
                    & lib_df$match %in% unique(blast$match), ]
 
   # getting entries from blast result
-  wip_df <- rbind(wip_df, blast[!blast$match %in% add_singles,])
+  wip_df <- suppressWarnings(gtools::smartbind(wip_df, blast[!blast$match %in% add_singles,]))
 
   msg <- sprintf("\nMultiple strains of %s were found when going through current blast file and strain library. Generating fasta file for this species for sequence alignment", unique(wip_df$match))
 
