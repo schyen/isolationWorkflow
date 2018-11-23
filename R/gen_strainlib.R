@@ -43,7 +43,7 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
 
   # read in blast result--------------------------------------------------------
   blast <- read.csv(blast_file, header = TRUE)
-  print(colnames(blast))
+
   # if strain library not supplied, make new, empty library---------------------
   if(is.null(lib_file)) {
 
