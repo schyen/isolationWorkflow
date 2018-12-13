@@ -43,6 +43,13 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
 
   # read in blast result--------------------------------------------------------
   blast <- read.csv(blast_file, header = TRUE)
+  blast <- blast[, c('query_num',	'sample_name',	'seq_len',
+                     'hit_num',	'match',	'accession',	'total_score',
+                     'perc_cover',	'perc_ident',	'evalue',
+                     'match_description',	'query_seq')]
+
+  # add time stamp
+  blast <- cbind(date = Sys.Date(), blast)
 
   # if strain library not supplied, make new, empty library---------------------
   if(is.null(lib_file)) {
@@ -50,10 +57,9 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
     lib_file <- paste0(file.path(lib_path, lib_name), ".csv")
 
     # empty library df
-    empty_lib <- blast[0, ]
+    empty_lib <- blast[0,]
 
-    write.table(empty_lib, lib_file, col.names = TRUE, row.names = FALSE,
-                sep = ',', na = "")
+    write.csv(empty_lib, lib_file, row.names = FALSE, na = "")
     msg <- sprintf("No strain library supplied. Creating new strain library: \n%s\n",
                    lib_file)
     message(msg)
@@ -64,6 +70,17 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
 
   # read in library------------------------------------------------------------
   lib_df <- read.csv(lib_file, header = TRUE, stringsAsFactors = FALSE)
+
+  # if date columm doesn't exist, add it
+  lib_df <- tryCatch({
+    lib_df <- lib_df[, c('date','query_num',	'sample_name',	'seq_len',
+                         'hit_num', 'match',	'accession',	'total_score',
+                         'perc_cover', 'perc_ident',	'evalue',
+                         'match_description',	'query_seq')]},
+    error = function(e) {
+      lib_df <- cbind(date = '', lib_df)
+      return(lib_df)
+    })
 
   # identify single species-----------------------------------------------------
   # put current library and current blast results together
@@ -83,11 +100,11 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
     msg <- sprintf("%s found as unique species that is not currently in your strain library. Adding to strain library.", add_singles)
     for(i in msg) message(i)
 
-    entry <- blast[blast$match %in% add_singles,]
-
     # appending entry to library
-    write.table(entry, lib_file, append = TRUE, sep = ',', row.names = FALSE,
-                col.names = FALSE)
+    entry <- blast[blast$match %in% add_singles,]
+    lib_df <- suppressWarnings(gtools::smartbind(lib_df, entry))
+
+    write.csv(lib_df, lib_file, row.names = FALSE)
   }
   else {
     message("No unique species added to strain library.")

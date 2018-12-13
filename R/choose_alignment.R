@@ -19,7 +19,26 @@ choose_alignment <- function(lib_path, lib_file, blast_file,
   lib_df <- read.csv(file.path(lib_path, lib_file), header = TRUE,
                      stringsAsFactors = FALSE)
 
+  # if date columm doesn't exist, add it
+  lib_df <- tryCatch({
+    lib_df <- lib_df[, c('date','query_num',	'sample_name',	'seq_len',
+                         'hit_num', 'match',	'accession',	'total_score',
+                         'perc_cover', 'perc_ident',	'evalue',
+                         'match_description',	'query_seq')]},
+    error = function(e) {
+      lib_df <- cbind(date = '', lib_df)
+      return(lib_df)
+    })
+
   blast_df <- read.csv(blast_file, header = TRUE)
+
+  # add time stamp
+  blast_df <- cbind(date = Sys.Date(), blast_df)
+
+  blast_df <- blast_df[, c('date','query_num',	'sample_name',	'seq_len',
+                             'hit_num',	'match',	'accession',	'total_score',
+                             'perc_cover',	'perc_ident',	'evalue',
+                             'match_description',	'query_seq')]
 
   for (i in 1:length(fastatoalign)) {
     print(fastatoalign[i])
@@ -57,15 +76,15 @@ choose_alignment <- function(lib_path, lib_file, blast_file,
       for(i in msg) message(msg)
     }
 
-
     prompt <- "Select which strains to add to strain library"
     selection <- select.list(title = prompt, choices = choices,
                              graphics = FALSE, multiple = TRUE)
 
     # adding blast result for selection to strain library
     entry <- blast_df[blast_df$sample_name %in% selection,]
-    write.table(entry, file.path(lib_path, lib_file), append = TRUE, sep = ',', row.names = FALSE,
-                col.names = FALSE)
+    lib_df <- suppressWarnings(gtools::smartbind(lib_df, entry))
+
+    write.csv(lib_df, file.path(lib_path, lib_file), row.names = FALSE)
 
     msg <- sprintf("Added blast result for %s to strain library",
                    selection)

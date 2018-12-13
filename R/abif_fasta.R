@@ -233,7 +233,7 @@ abif_fasta <- function(folder=NULL, exclude=NULL,
     fexport <- str_extract(output, '.*(?=\\.)')
     fexport <- paste0(fexport, '_check.csv')
     fexport <- file.path(path, fexport)
-    write.csv(file=fexport, checkseq)
+    write.csv(file=fexport, checkseq, row.names = FALSE)
   }
 
   if(export.check==TRUE & output == FALSE) {
