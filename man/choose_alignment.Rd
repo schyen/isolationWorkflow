@@ -21,5 +21,5 @@ choose_alignment(lib_path, lib_file, blast_file, fasta_path, fastatoalign)
 updates strain library with strains selected
 }
 \description{
-function to choose sample based on alignment using EMBL clustal omega
+function to choose sample based on alignment using DECIPHER Alignseqs
 }
