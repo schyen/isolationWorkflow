@@ -54,7 +54,7 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
   # if strain library not supplied, make new, empty library---------------------
   if(is.null(lib_file)) {
 
-    lib_file <- paste0(file.path(lib_path, lib_name), ".csv")
+    lib_file <- file.path(lib_path, paste0(lib_name, ".csv"))
 
     # empty library df
     empty_lib <- blast[0,]
@@ -103,7 +103,6 @@ gen_strainlib <- function(blast_file, lib_path, lib_file = NULL,
     # appending entry to library
     entry <- blast[blast$match %in% add_singles,]
     lib_df <- suppressWarnings(gtools::smartbind(lib_df, entry))
-
     write.csv(lib_df, lib_file, row.names = FALSE)
   }
   else {

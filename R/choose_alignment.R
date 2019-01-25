@@ -1,6 +1,6 @@
 #' choose_alignment
 #'
-#' function to choose sample based on alignment using EMBL clustal omega
+#' function to choose sample based on alignment using DECIPHER Alignseqs
 #'
 #' @param lib_path string. path. location of strain library
 #' @param lib_file string. file name. strain library file
