@@ -1,4 +1,4 @@
-isolationWorkflow
+# isolationWorkflow
 
 R package to help with workflow of building a strain library during isolation experiments. Allows you to preview, trim Sanger sequences before organizing into a fasta file that is ready to BLAST. Reads Blast results, and aligns sequences in order to build and curate a strain library
 
